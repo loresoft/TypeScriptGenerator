@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>TypeScriptGenerator</id>
+        <version>1.0.0</version>
+        <authors>LoreSoft</authors>
+        <owners>LoreSoft</owners>
+        <projectUrl>https://github.com/loresoft/TypeScriptGenerator</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <developmentDependency>true</developmentDependency>
+        <description>CodeSmith Template to generate TypeScript interface for .NET a class</description>
+        <language>en-US</language>
+        <tags>TypeScript CodeSmith</tags>
+    </metadata>
+    <files>
+        <file src="Generator.cs" target="tools\Generator.cs" />
+        <file src="TypeScript.Interface.cst" target="tools\TypeScript.Interface.cst" />
+    </files>
+</package>
