@@ -28,7 +28,7 @@
     Type="System.String" Default="" Optional="True"
     Description="The type this interface extends."%>
 <%@ Property Category="2.Interface" Name="FileHeader"
-    Type="CodeSmith.CustomProperties.StringCollection" Default="" Optional="True"
+    Type="System.String" Default="" Optional="True"
     Description="Text to put in the begining of the file"%>
 <%@ Property Category="2.Interface" Name="IgnoreProperties"
     Type="CodeSmith.CustomProperties.StringCollection" Default="" Optional="True"
@@ -37,15 +37,11 @@
     Type="System.Boolean" Default="False" Optional="False"
     Description="Ignore properties of script type any."%>
 <%@ Property Category="2.Interface" Name="OptionalProperty"
-    Type="OptionalType" Default="All" Optional="False"
+    Type="OptionalType" Default="None" Optional="False"
     Description="Controls property optional syntax."%>
 
 <% var scriptInterface = Generator.CreateInterface(AssemblyFile, ClassType); %>
-<% if (FileHeader != null) { %>
-<% foreach (var line in FileHeader) { %>
-<%= line %>
-<% } %>
-<% } %>
+<%= FileHeader ?? string.Empty %>
 module <%= ModuleName %> {
     "use strict";
 
