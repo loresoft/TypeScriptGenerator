@@ -41,8 +41,10 @@
     Description="Controls property optional syntax."%>
 
 <% var scriptInterface = Generator.CreateInterface(AssemblyFile, ClassType); %>
+<% if (FileHeader != null) { %>
 <% foreach (var line in FileHeader) { %>
 <%= line %>
+<% } %>
 <% } %>
 module <%= ModuleName %> {
     "use strict";
