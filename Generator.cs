@@ -8,7 +8,7 @@ using Mono.Cecil;
 
 public static class Generator
 {
-    public static TypeScriptInterface CreateInterface(string assemblyFile, string rootType)
+    public static TypeScriptInterface CreateInterface(string assemblyFile, string rootType, bool odata = false)
     {
         var moduleDefinition = ModuleDefinition.ReadModule(assemblyFile);
         if (moduleDefinition == null)
@@ -32,7 +32,7 @@ public static class Generator
             scriptPropery.Name = propertyDefinition.Name;
 
             var propertyType = propertyDefinition.PropertyType;
-            scriptPropery.Type = propertyType.ToScriptType();
+            scriptPropery.Type = propertyType.ToScriptType(odata);
             scriptPropery.IsNullable = propertyDefinition.PropertyType.IsNullable();
             scriptPropery.IsArray = propertyDefinition.PropertyType.IsScriptArray();
              scriptInterface.Properties.Add(scriptPropery);
@@ -184,7 +184,7 @@ public static class Extensions
         return true;
     }
 
-    public static string ToScriptType(this TypeReference typeReference)
+    public static string ToScriptType(this TypeReference typeReference, bool odata = false)
     {
         var t = typeReference.GetUnderlyingType();
 
@@ -192,16 +192,17 @@ public static class Extensions
         {
             case "Int16":
             case "Int32":
-            case "Int64":
             case "Byte":
-            case "Decimal":
             case "Double":
             case "SByte":
             case "Single":
             case "UInt16":
             case "UInt32":
-            case "UInt64":
                 return "number";
+            case "Decimal":
+            case "Int64":
+            case "UInt64":
+                return odata ? "string" : "number";
             case "Boolean":
                 return "boolean";
             case "DateTime":

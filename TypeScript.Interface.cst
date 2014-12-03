@@ -39,8 +39,11 @@
 <%@ Property Category="2.Interface" Name="OptionalProperty"
     Type="OptionalType" Default="None" Optional="False"
     Description="Controls property optional syntax."%>
+<%@ Property Category="2.Interface" Name="UseOData"
+    Type="System.Boolean" Default="False" Optional="False"
+    Description="Use OData 4 types."%>
 
-<% var scriptInterface = Generator.CreateInterface(AssemblyFile, ClassType); %>
+<% var scriptInterface = Generator.CreateInterface(AssemblyFile, ClassType, UseOData); %>
 <%= FileHeader ?? string.Empty %>
 module <%= ModuleName %> {
     "use strict";
