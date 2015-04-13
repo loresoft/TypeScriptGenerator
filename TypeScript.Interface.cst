@@ -1,4 +1,4 @@
-﻿<%@ Template Language="C#" TargetLanguage="JavaScript" %>
+﻿<%@ Template Language="C#" TargetLanguage="TypeScript" %>
 
 
 <%@ Assembly Name="CodeSmith.CustomProperties" %>

@@ -84,7 +84,6 @@ public static class Extensions
         if (genericDefinition.GenericParameters.Count != 1 && genericDefinition.FullName != "System.Nullable`1")
             return type;
 
-        return genericType.GenericArguments.Single();
     }
 
     public static bool HasInterface(this TypeReference typeReference, string fullName)
@@ -143,7 +142,7 @@ public static class Extensions
             return false;
 
         //NOTE issue with custom implementation and matching up argument position
-        elementType = genericCollectionType.GenericArguments.Single();
+        elementType = genericCollectionType.GenericArguments.FirstOrDefault();
         return true;
     }
 
@@ -160,7 +159,7 @@ public static class Extensions
             return false;
 
         //NOTE issue with custom implementation and matching up argument position
-        elementType = genericCollectionType.GenericArguments.Single();
+        elementType = genericCollectionType.GenericArguments.FirstOrDefault();
         return true;
     }
 
