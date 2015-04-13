@@ -84,6 +84,7 @@ public static class Extensions
         if (genericDefinition.GenericParameters.Count != 1 && genericDefinition.FullName != "System.Nullable`1")
             return type;
 
+        return genericType.GenericArguments.FirstOrDefault() ?? type;
     }
 
     public static bool HasInterface(this TypeReference typeReference, string fullName)
