@@ -10,6 +10,7 @@
 <%@ Import Namespace="System.Collections.Generic" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Linq" %>
+<%@ Import Namespace="System.Text" %>
 <%@ Import Namespace="Mono.Cecil" %>
 
 <%@ Property Category="1.Type" Name="AssemblyFile"
@@ -22,7 +23,7 @@
     Description="The full type name to use." %>
 
 <%@ Property Category="2.Interface" Name="ModuleName"
-    Type="System.String" Default="" Optional="False"
+    Type="System.String" Default="" Optional="True"
     Description="The TypeScript Module name."%>
 <%@ Property Category="2.Interface" Name="Extends"
     Type="System.String" Default="" Optional="True"
@@ -42,18 +43,26 @@
 <%@ Property Category="2.Interface" Name="UseOData"
     Type="System.Boolean" Default="False" Optional="False"
     Description="Use OData 4 types."%>
+<%@ Property Category="2.Interface" Name="PropertyNaming"
+    Type="Naming" Default="PascalCase" Optional="False"
+    Description="Controls property name syntax."%>
 
 <% var scriptInterface = Generator.CreateInterface(AssemblyFile, ClassType, UseOData); %>
 <%= FileHeader ?? string.Empty %>
+
+<% if (!string.IsNullOrEmpty(ModuleName)) { %>
 module <%= ModuleName %> {
     "use strict";
 
+<% } %>
     export interface I<%= scriptInterface.Name %><% if (!string.IsNullOrEmpty(Extends)) { %> extends <%= Extends %><% } %> {
 <% foreach (var property in scriptInterface.Properties.Where(p => IsIgnored(p) == false)) { %>
-        <%= property.Name %><%= OptionalFlag(property) %>: <%= property.Type %>;
+        <%= PropertyName(property.Name) %><%= OptionalFlag(property) %>: <%= property.Type %>;
 <% } %>
     }
+<% if (!string.IsNullOrEmpty(ModuleName)) { %>
 }
+<% } %>
 
 <script runat="template">
 
@@ -62,6 +71,13 @@ public enum OptionalType
     All,
     Nullable,
     None
+}
+
+public enum Naming
+{
+    PascalCase,
+    CamalCase,
+    LowerCaseUnderscore
 }
 
 public string OptionalFlag(TypeScriptProperty property)
@@ -88,5 +104,38 @@ public bool IsIgnored(string name)
         return false;
 
     return IgnoreProperties.Contains(name);
+}
+
+public string PropertyName(string name)
+{
+    if (string.IsNullOrEmpty(name))
+        return string.Empty;
+    
+    switch(PropertyNaming)
+    {
+        case Naming.CamalCase:
+            return StringUtil.ToCamelCase(name);
+        case Naming.LowerCaseUnderscore:   
+            return ToLowerUnderscoredWords(name);
+        default:
+            return StringUtil.ToPascalCase(name);
+    }
+}
+
+public string ToLowerUnderscoredWords(string value) {
+    var builder = new StringBuilder(value.Length + 10);
+    for (int index = 0; index < value.Length; index++) {
+        char c = value[index];
+        if (Char.IsUpper(c)) {
+            if (index > 0 && value[index - 1] != '_')
+                builder.Append('_');
+
+            builder.Append(Char.ToLower(c));
+        } else {
+            builder.Append(c);
+        }
+    }
+
+    return builder.ToString();
 }
 </script>
